@@ -2,9 +2,7 @@ package Db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 public class DB {
@@ -26,6 +24,7 @@ public class DB {
                 Properties properties = loadProperties();
                 String dbUrl = properties.getProperty("dbUrl");
                 conn = DriverManager.getConnection(dbUrl, properties);
+                System.out.println("Database successfully connected.");
             } catch (SQLException e) {
                 throw new DbException("We were unable to connect to the database.\n" + e.getMessage());
             }
@@ -37,8 +36,29 @@ public class DB {
         if (conn != null) {
             try {
                 conn.close();
+                System.out.print("Database closed successfully.");
             } catch (SQLException e) {
                 throw new DbException("It was not possible to close your database.\n" + e.getMessage());
+            }
+        }
+    }
+
+    public static void closeStatement(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new DbException("It was not possible to close the statement.\n" + e.getMessage());
+            }
+        }
+    }
+
+    public static void closeResultSet(ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                throw new DbException("It was not possible to close the ResultSet.\n" + e.getMessage());
             }
         }
     }
