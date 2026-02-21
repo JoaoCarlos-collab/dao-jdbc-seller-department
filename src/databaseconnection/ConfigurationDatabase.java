@@ -1,11 +1,13 @@
-package Db;
+package databaseconnection;
+
+import databaseconnection.exceptions.DbException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class DB {
+public class ConfigurationDatabase {
     private static Connection conn = null;
 
     private static Properties loadProperties() {

@@ -1,4 +1,4 @@
-package Db;
+package databaseconnection.exceptions;
 
 public class DbException extends RuntimeException{
     private static final long serialVersion = 1L;

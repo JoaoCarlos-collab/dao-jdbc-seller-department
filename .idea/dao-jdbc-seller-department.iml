@@ -10,7 +10,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/bibliotecas/mysql-connector-j-8.0.33.jar!/" />
+          <root url="jar://$MODULE_DIR$/bibliotecas/ojdbc17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
