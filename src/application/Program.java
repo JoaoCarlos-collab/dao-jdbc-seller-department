@@ -1,5 +1,7 @@
 package application;
 import databaseconnection.exceptions.DateUtils;
+import model.dao.DaoFactory;
+import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
@@ -22,5 +24,7 @@ public class Program {
         Date dateBirth2 = DateUtils.treatmentDate("24/06/1990");
         Seller seller2 = new Seller(3,"João Carlos","joaoCarlos198@gmail.com", dateBirth2, 2000.00,obj1);
         System.out.println(seller2);
+
+        SellerDao sellerDao = DaoFactory.createSellerDao();
     }
 }
