@@ -24,7 +24,9 @@ public class Program {
         Date dateBirth2 = DateUtils.treatmentDate("24/06/1990");
         Seller seller2 = new Seller(3,"João Carlos","joaoCarlos198@gmail.com", dateBirth2, 2000.00,obj1);
         System.out.println(seller2);
-
+        System.out.println();
         SellerDao sellerDao = DaoFactory.createSellerDao();
+        Seller seller3 = sellerDao.findId(2);
+        System.out.println(seller3);
     }
 }

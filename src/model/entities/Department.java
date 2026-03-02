@@ -7,47 +7,47 @@ import java.util.Objects;
 public class Department implements Serializable {
     @Serial
     private static final long serialVersionUID = 8763655018983570959L;
-    private Integer id;
-    private String name;
+    private Integer depId;
+    private String depName;
 
     public Department() {
     }
 
     public Department(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+        this.depId = id;
+        this.depName = name;
     }
 
     public Integer getId() {
-        return id;
+        return depId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.depId = id;
     }
 
     public String getName() {
-        return name;
+        return depName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.depName = name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(depId, that.depId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(depId);
     }
 
     @Override
     public String toString() {
-        return name;
+        return depName;
     }
 }
