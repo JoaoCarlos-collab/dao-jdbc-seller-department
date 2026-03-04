@@ -26,7 +26,7 @@ INSERT INTO department (Name)
 VALUES ('Books');
 
 INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) 
-VALUES ('Bob Brown', 'bob@gmail.com', TO_DATE('21/04/1998', 'DD/MM/YYYY'), 2000.0, 1);
+VALUES ('João', 'jao@gmail.com', TO_DATE('24/06/2004', 'DD/MM/YYYY'), 2000.0, 1);
 
 INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) 
 VALUES ('Maria Green', 'maria@gmail.com', TO_DATE('31/12/1979', 'DD/MM/YYYY'), 3500.0, 2);
@@ -49,5 +49,7 @@ WHERE seller.Id = 3;
 
 ALTER TABLE department
 RENAME COLUMN NAME TO NAMEDEP;
+
+SELECT * FROM seller;
 
 
