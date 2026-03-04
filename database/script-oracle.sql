@@ -38,12 +38,16 @@ INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId)
 VALUES ('Martha Red', 'martha@gmail.com', TO_DATE('30/11/1993', 'DD/MM/YYYY'), 3000.0, 4);
 
 COMMIT;
+DESCRIBE seller;
+DESCRIBE department;
 
-SELECT * FROM seller;
-SELECT * FROM department;
-
-SELECT seller.*, department.Name AS DepName
+SELECT seller.*, department.NameDEP AS DepName
 FROM seller
 INNER JOIN department 
-ON seller.DepartmentId = department.Id
+ON seller.DepartmentId = department.IDDEP
 WHERE seller.Id = 3;
+
+ALTER TABLE department
+RENAME COLUMN NAME TO NAMEDEP;
+
+
