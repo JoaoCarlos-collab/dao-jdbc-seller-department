@@ -16,7 +16,11 @@ public class Program {
         System.out.println(seller);
         System.err.println("-----------------------------------------------------");
         Department department = new Department(1, null);
-        List<Seller> list = sellerDao.findByDepartment(department);
-        list.forEach(System.out::println);
+        List<Seller> listFindId = sellerDao.findByDepartment(department);
+        listFindId.forEach(System.out::println);
+        System.out.println("-----------------------------------------------------");
+        
+        List<Seller> listFindAll = sellerDao.findAll();
+        listFindAll.forEach(System.out::println);
     }
 }

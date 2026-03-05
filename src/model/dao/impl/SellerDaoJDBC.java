@@ -5,6 +5,8 @@ import databaseconnection.exceptions.DbException;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
+import oracle.jdbc.proxy.annotation.Pre;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -89,7 +91,43 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public List<Seller> findAll() {
-        return List.of();
+        
+    	PreparedStatement preparedStatement = null;
+    	ResultSet resultSet = null;
+    	
+    	try {
+    		preparedStatement = connection.prepareStatement(
+				"SELECT seller.*, department.NameDEP AS DepName "
+	    		+ "FROM seller "
+	    		+ "INNER JOIN department " 
+	    		+ "ON seller.DepartmentId = department.IDDEP "
+	    		+ "ORDER BY Name"
+				);
+    		
+    		resultSet = preparedStatement.executeQuery();
+    		
+    		List<Seller> listSeller = new ArrayList<Seller>();
+    		Map<Integer, Department> map = new HashMap<>();
+    		
+			while (resultSet.next()) {
+				Department depar = map.get(resultSet.getInt("DepartmentId"));
+				if(depar == null) {
+					Department departmentt = instantiateDepartment(resultSet);
+					map.put(resultSet.getInt("DepartmentId"), departmentt);
+				}
+				
+				Seller seller = instantiateSeller(resultSet, depar);
+				listSeller.add(seller);
+			}
+			return listSeller;
+			
+		} catch (Exception e) {
+			 throw new DbException("The findAll command could not be executed.\n" + e.getMessage());
+			 
+		}finally {
+			ConfigurationDatabase.closeStatement(preparedStatement);
+			ConfigurationDatabase.closeResultSet(resultSet);
+		}
     }
 
 	@Override
@@ -117,9 +155,10 @@ public class SellerDaoJDBC implements SellerDao {
             	Department depar = map.get(resultSet.getInt("DepartmentId"));
             	if (depar == null) {
             		Department departmentt = instantiateDepartment(resultSet);
-                    Seller seller = instantiateSeller(resultSet, departmentt);
-                    listSeller.add(seller);
-            	}                
+                    map.put(resultSet.getInt("DepartmentId"), departmentt);
+            	}   
+            	Seller seller = instantiateSeller(resultSet, depar);
+                listSeller.add(seller);
             }
             
             return listSeller;
