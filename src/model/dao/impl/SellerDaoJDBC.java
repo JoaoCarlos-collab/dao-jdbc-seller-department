@@ -8,9 +8,12 @@ import model.entities.Seller;
 import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +29,42 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller seller) {
+    	PreparedStatement preparedStatement = null;
+    	
+    	try {
+    		
+    		preparedStatement = connection.prepareStatement(
+    				"INSERT INTO seller "
+    				+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+    				+ "VALUES "
+    				+ "(?, ?, ?, ?, ?)",
+    				new String[] {"Id"}
+    				);
+    		preparedStatement.setString(1, seller.getName());
+    		preparedStatement.setString(2, seller.getEmail());
+    		preparedStatement.setDate(3, new java.sql.Date(seller.getBirthDate().getTime()));
+    		preparedStatement.setDouble(4, seller.getBaseSalary());
+    		preparedStatement.setInt(5, seller.getDepartment().getId());
+    		
+    		int insertedLines = preparedStatement.executeUpdate();
+    			if (insertedLines > 0) {
+    			ResultSet resultSet = preparedStatement.getGeneratedKeys();
+    			if(resultSet.next()) {
+    				int id = resultSet.getInt(1);
+    				seller.setId(id);
+    			}
+    			ConfigurationDatabase.closeResultSet(resultSet);
+    		}
+    		else {
+    			throw new DbException("It was not possible to insert the row.");
+    		}
+			
+		} catch (SQLException e) {
+			throw new DbException("The insert command could not be executed.\n" + e.getMessage());
 
+		}finally {
+			ConfigurationDatabase.closeStatement(preparedStatement);
+		}
     }
 
     @Override
@@ -71,23 +109,6 @@ public class SellerDaoJDBC implements SellerDao {
         return null;
     }
     
-    public Department instantiateDepartment(ResultSet resultSet) throws SQLException {
-    	Department department = new Department();
-        department.setId(resultSet.getInt("DepartmentId"));
-        department.setName(resultSet.getString("DepName"));
-        return department;
-    }
-    
-    public Seller instantiateSeller(ResultSet resultSet, Department department) throws SQLException {
-    	Seller seller = new Seller();
-        seller.setId(resultSet.getInt("ID"));
-        seller.setName(resultSet.getString("NAME"));
-        seller.setEmail(resultSet.getString("EMAIL"));
-        seller.setBirthDate(resultSet.getDate("BIRTHDATE"));
-        seller.setBaseSalary(resultSet.getDouble("BASESALARY"));
-        seller.setDepartment(department);
-        return seller;
-    }
 
     @Override
     public List<Seller> findAll() {
@@ -170,6 +191,23 @@ public class SellerDaoJDBC implements SellerDao {
             ConfigurationDatabase.closeStatement(preparedStatement);
             ConfigurationDatabase.closeResultSet(resultSet);
         }
-        
 	}
+	
+	public Department instantiateDepartment(ResultSet resultSet) throws SQLException {
+    	Department department = new Department();
+        department.setId(resultSet.getInt("DepartmentId"));
+        department.setName(resultSet.getString("DepName"));
+        return department;
+    }
+    
+    public Seller instantiateSeller(ResultSet resultSet, Department department) throws SQLException {
+    	Seller seller = new Seller();
+        seller.setId(resultSet.getInt("ID"));
+        seller.setName(resultSet.getString("NAME"));
+        seller.setEmail(resultSet.getString("EMAIL"));
+        seller.setBirthDate(resultSet.getDate("BIRTHDATE"));
+        seller.setBaseSalary(resultSet.getDouble("BASESALARY"));
+        seller.setDepartment(department);
+        return seller;
+    }
 }
