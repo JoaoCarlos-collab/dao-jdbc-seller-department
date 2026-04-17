@@ -99,6 +99,25 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void delete(Seller seller) {
+PreparedStatement preparedStatement = null;
+    	
+    	try {
+    		
+    		preparedStatement = connection.prepareStatement(
+    				"DELETE FROM seller "
+    				+ "WHERE Id = ?"
+    				);
+    		preparedStatement.setInt(1, seller.getId());
+    		
+    		preparedStatement.executeUpdate();
+    			
+			
+		} catch (SQLException e) {
+			throw new DbException("The insert command could not be executed.\n" + e.getMessage());
+
+		}finally {
+			ConfigurationDatabase.closeStatement(preparedStatement);
+		}
 
     }
 

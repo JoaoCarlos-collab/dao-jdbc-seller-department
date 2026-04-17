@@ -36,7 +36,7 @@ public class Program {
         sellerId.setName("JBPassa");
         sellerId.setEmail("JB1999@gmail.com");
         sellerId.setBaseSalary(5000.00);
-        sellerDao.update(sellerId);
+        sellerDao.delete(sellerId);
         System.out.println(sellerId);
     }
 }
